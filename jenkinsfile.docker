@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "calc-image"
-        CONTAINER_NAME = "calc-container"
+        DOCKER_IMAGE = 'calc-image'
+        CONTAINER_NAME = 'calc-container'
     }
 
     stages {
@@ -15,13 +15,19 @@ pipeline {
 
         stage('Construir imagen Docker') {
             steps {
-                sh 'docker build -t $IMAGE_NAME .'
+                sh 'docker build -t $DOCKER_IMAGE .'
+            }
+        }
+
+        stage('Eliminar contenedor anterior (si existe)') {
+            steps {
+                sh 'docker rm -f $CONTAINER_NAME || true'
             }
         }
 
         stage('Ejecutar contenedor') {
             steps {
-                sh 'docker run --name $CONTAINER_NAME -d $IMAGE_NAME'
+                sh 'docker run --name $CONTAINER_NAME -d $DOCKER_IMAGE'
             }
         }
 
@@ -33,10 +39,8 @@ pipeline {
 
         stage('Parar y limpiar contenedor') {
             steps {
-                sh '''
-                    docker stop $CONTAINER_NAME || true
-                    docker rm $CONTAINER_NAME || true
-                '''
+                sh 'docker stop $CONTAINER_NAME || true'
+                sh 'docker rm $CONTAINER_NAME || true'
             }
         }
 
