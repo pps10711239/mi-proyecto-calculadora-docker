@@ -1,4 +1,4 @@
-# Imagen base ligera de Python
+#Imagen base ligera de Python
 FROM python:3.9-slim
 
 # Establecer el directorio de trabajo dentro del contenedor
@@ -12,3 +12,4 @@ RUN pip install --no-cache-dir -r requirements.txt || true
 
 # Mantener el contenedor en ejecución
 CMD ["tail", "-f", "/dev/null"]
+

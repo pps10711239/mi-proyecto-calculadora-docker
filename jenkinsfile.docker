@@ -1,4 +1,6 @@
 pipeline {
+  GNU nano 7.2                                                                                              jenkinsfile.docker                                                                                                       
+pipeline {
     agent any
 
     environment {
@@ -45,3 +47,4 @@ pipeline {
         }
     }
 }
+
