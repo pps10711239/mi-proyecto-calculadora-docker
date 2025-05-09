@@ -1,10 +1,9 @@
-FROM python:3.10-slim
+FROM python:3.9-slim
 
 WORKDIR /app
 
-COPY calculadora.py .
-COPY test_calculator.py .
+COPY . .
 
-RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt || true
 
-CMD ["python3", "-m", "unittest", "test_calculator.py"]
+CMD ["python", "-m", "unittest", "discover"]

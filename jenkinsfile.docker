@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clonar código') {
             steps {
-                git branch: 'main', url: 'https://github.com/pps10711239/mi-proyecto-calculadora-docker.git'
+                git 'https://github.com/pps10711239/mi-proyecto-calculadora-docker.git'
             }
         }
 
@@ -16,19 +16,20 @@ pipeline {
 
         stage('Ejecutar contenedor') {
             steps {
-                sh 'docker run --name calc-temp -d calc-image tail -f /dev/null'
+                sh 'docker run --name calc-container -d calc-image'
             }
         }
 
         stage('Ejecutar tests') {
             steps {
-                sh 'docker exec calc-temp python3 -m unittest test_calculator.py'
+                sh 'docker exec calc-container python -m unittest discover'
             }
         }
 
         stage('Parar y limpiar contenedor') {
             steps {
-                sh 'docker stop calc-temp && docker rm calc-temp'
+                sh 'docker stop calc-container || true'
+                sh 'docker rm calc-container || true'
             }
         }
 

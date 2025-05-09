@@ -1,6 +1,7 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  calc:
+  calculadora:
     build: .
-    container_name: calc_test
+    container_name: calc-container
+    command: ["python", "-m", "unittest", "discover"]
