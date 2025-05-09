@@ -12,3 +12,4 @@ if __name__ == "__main__":
     calc = Calculadora()
     resultado = calc.multiplicar(num1, num2)
     print("Resultado:", resultado)
+# Linea añadida
