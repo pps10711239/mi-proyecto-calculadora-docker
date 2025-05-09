@@ -14,5 +14,4 @@ if __name__ == "__main__":
     print("Resultado:", resultado)
 # Linea añadida
 # Cambio de prueba para Jenkins
-# Cambio de prueba para Jenkins
-# Cambio de prueba para Jenkins
+# Ojalá que funciones
