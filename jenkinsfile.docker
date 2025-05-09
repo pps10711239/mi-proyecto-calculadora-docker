@@ -22,7 +22,7 @@ pipeline {
 
         stage('Ejecutar tests') {
             steps {
-                sh 'docker exec calc-container python -m unittest discover'
+                sh 'docker exec calc-container pytest test_calculator.py'
             }
         }
 
@@ -35,7 +35,7 @@ pipeline {
 
         stage('Ejecutar docker-compose') {
             steps {
-                sh 'docker-compose up --build --abort-on-container-exit'
+                sh 'docker-compose up --build -d'
             }
         }
     }
