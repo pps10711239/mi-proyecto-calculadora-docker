@@ -1,41 +1,46 @@
 pipeline {
     agent any
 
+    environment {
+        IMAGE_NAME = "calc-image"
+        CONTAINER_NAME = "calc-container"
+    }
+
     stages {
         stage('Clonar código') {
             steps {
-                git 'https://github.com/pps10711239/mi-proyecto-calculadora-docker.git'
+                git url: 'https://github.com/pps10711239/mi-proyecto-calculadora-docker.git', branch: 'main'
             }
         }
 
         stage('Construir imagen Docker') {
             steps {
-                sh 'docker build -t calc-image .'
+                sh "docker build -t ${IMAGE_NAME} ."
             }
         }
 
         stage('Ejecutar contenedor') {
             steps {
-                sh 'docker run --name calc-container -d calc-image'
+                sh "docker run --name ${CONTAINER_NAME} -d ${IMAGE_NAME}"
             }
         }
 
         stage('Ejecutar tests') {
             steps {
-                sh 'docker exec calc-container python -m unittest discover'
+                sh "docker exec ${CONTAINER_NAME} pytest test_calculator.py"
             }
         }
 
         stage('Parar y limpiar contenedor') {
             steps {
-                sh 'docker stop calc-container || true'
-                sh 'docker rm calc-container || true'
+                sh "docker stop ${CONTAINER_NAME} || true"
+                sh "docker rm ${CONTAINER_NAME} || true"
             }
         }
 
         stage('Ejecutar docker-compose') {
             steps {
-                sh 'docker-compose up --build --abort-on-container-exit'
+                sh 'docker compose up --build -d'
             }
         }
     }
