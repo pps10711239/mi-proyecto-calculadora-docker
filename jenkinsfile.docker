@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clonar código') {
+            steps {
+                git branch: 'main', url: 'https://github.com/pps10711239/mi-proyecto-calculadora-docker.git'
+            }
+        }
+
+        stage('Construir imagen Docker') {
+            steps {
+                sh 'docker build -t calc-image .'
+            }
+        }
+
+        stage('Ejecutar contenedor') {
+            steps {
+                sh 'docker run --name calc-temp -d calc-image tail -f /dev/null'
+            }
+        }
+
+        stage('Ejecutar tests') {
+            steps {
+                sh 'docker exec calc-temp python3 -m unittest test_calculator.py'
+            }
+        }
+
+        stage('Parar y limpiar contenedor') {
+            steps {
+                sh 'docker stop calc-temp && docker rm calc-temp'
+            }
+        }
+
+        stage('Ejecutar docker-compose') {
+            steps {
+                sh 'docker-compose up --build --abort-on-container-exit'
+            }
+        }
+    }
+}
