@@ -1,9 +1,8 @@
-FROM python:3.9-slim
+FROM python:3.10-slim
 
 WORKDIR /app
-
 COPY . .
 
-RUN pip install --no-cache-dir -r requirements.txt || true
+RUN pip install --no-cache-dir pytest
 
-CMD ["python", "-m", "unittest", "discover"]
+CMD ["pytest", "test_calculator.py"]
