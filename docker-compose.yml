@@ -1,5 +1,13 @@
-version: '3'
+version: '3.8'
+
 services:
   calculadora:
-    build: .
-    container_name: contenedor-calculadora
+    image: calc-image
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: calc-container
+    working_dir: /app
+    command: ["pytest", "test_calculator.py"]
+    volumes:
+      - .:/app
