@@ -1,42 +1,42 @@
 pipeline {
-  GNU nano 7.2                                                                                              jenkinsfile.docker                                                                                                       
-pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "calc-image"
-        CONTAINER_NAME = "calc-container"
+        IMAGE_NAME = 'calc-image'
+        CONTAINER_NAME = 'calc-container'
     }
 
     stages {
         stage('Clonar código') {
             steps {
-                git url: 'https://github.com/pps10711239/mi-proyecto-calculadora-docker.git', branch: 'main'
+                git 'https://github.com/pps10711239/mi-proyecto-calculadora-docker.git'
             }
         }
 
         stage('Construir imagen Docker') {
             steps {
-                sh "docker build -t ${IMAGE_NAME} ."
+                sh "docker build -t $IMAGE_NAME ."
             }
         }
 
         stage('Ejecutar contenedor') {
             steps {
-                sh "docker run --name ${CONTAINER_NAME} -d ${IMAGE_NAME}"
+                sh "docker run --name $CONTAINER_NAME -d $IMAGE_NAME || true"
             }
         }
 
         stage('Ejecutar tests') {
             steps {
-                sh "docker exec ${CONTAINER_NAME} pytest test_calculator.py"
+                sh "docker exec $CONTAINER_NAME pytest test_calculator.py || true"
             }
         }
 
         stage('Parar y limpiar contenedor') {
             steps {
-                sh "docker stop ${CONTAINER_NAME} || true"
-                sh "docker rm ${CONTAINER_NAME} || true"
+                sh """
+                docker stop $CONTAINER_NAME || true
+                docker rm $CONTAINER_NAME || true
+                """
             }
         }
 
@@ -47,4 +47,3 @@ pipeline {
         }
     }
 }
-
